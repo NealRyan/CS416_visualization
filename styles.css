@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chart {
+    width: 80%;
+    height: 66vh;
+}
+
+.title {
+    text-align: center;
+    font-size: 24px;
+    margin: 20px 0;
+}
+
+.message {
+    text-align: center;
+    font-size: 18px;
+    margin: 20px;
+    width: 80%;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    shape-rendering: crispEdges;
+}
+
+.dot {
+    fill: steelblue;
+    stroke: #000;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls select, .controls button {
+    margin: 0 10px;
+}
+
+.message {
+    text-align: center;
+    font-size: 18px;
+    margin: 20px;
+    width: 80%;
+    white-space: pre-wrap;
+}

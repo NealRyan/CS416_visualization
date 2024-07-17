@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars 2017 Visualization</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="title" class="title"></div>
+    <div id="chart" class="chart"></div>
+    <div id="message" class="message"></div>
+    <div class="controls">
+        <select id="fuel-select" style="display: none;">
+            <option value="Gasoline">Gasoline</option>
+            <option value="Diesel">Diesel</option>
+        </select>
+        <select id="make-select" style="display: none;"></select>
+        <select id="y-axis-select" style="display: none;">
+            <option value="AverageHighwayMPG">Highway MPG</option>
+            <option value="AverageCityMPG">City MPG</option>
+        </select>
+        <button id="next-button">Next -></button>
+        <button id="reset-button" style="display: none;">Reset</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
