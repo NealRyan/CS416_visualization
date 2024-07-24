@@ -6,9 +6,9 @@ const makeToCountry = {
   'Mazda': 'Japan', 'Subaru': 'Japan', 'Mitsubishi': 'Japan',
   'Ford': 'USA', 'Chevrolet': 'USA', 'Dodge': 'USA', 'Chrysler': 'USA', 'Jeep': 'USA', 'Cadillac': 'USA',
   'Buick': 'USA', 'GMC': 'USA', 'Lincoln': 'USA', 'Ram': 'USA', 'Tesla': 'USA',
-  'BMW': 'Germany', 'Mercedes-Benz': 'Germany', 'Audi': 'Germany', 'Volkswagen': 'Germany', 'Porsche': 'Germany',
-  'Volvo': 'Sweden', 'Jaguar': 'UK', 'Land Rover': 'UK', 'Mini': 'UK',
-  'Fiat': 'Italy', 'Alfa Romeo': 'Italy', 'Maserati': 'Italy',
+  'BMW': 'Germany', 'Mercedes-Benz': 'Germany', 'Audi': 'Germany', 'Volkswagen': 'Germany', 'Porsche': 'Germany', 'Lamborghini': 'Germany',
+  'Volvo': 'Sweden', 'Jaguar': 'UK', 'Land Rover': 'UK', 'Mini': 'UK', 'Rolls-Royce': 'UK',
+  'Fiat': 'Italy', 'Alfa Romeo': 'Italy', 'Maserati': 'Italy', 'Ferrari': 'Italy',
   'Hyundai': 'South Korea', 'Kia': 'South Korea', 'Genesis': 'South Korea'
 };
 
