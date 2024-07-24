@@ -19,17 +19,16 @@ function setTitleAndMessage(title, message) {
 }
 
 //set dimensions
-const margin = {top: 20, right: 30, bottom: 60, left: 60},
-  width = 800 - margin.left - margin.right,
-  height = 600 - margin.top - margin.bottom;
+const margin = {top: 20, right: 30, bottom: 40, left: 60},
+  width = 700 - margin.left - margin.right,
+  height = 400 - margin.top - margin.bottom;
 
 //add svg to page
 const svg = d3.select("#chart")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const colorScale = d3.scaleOrdinal()
   .domain(['Japan', 'USA', 'Germany', 'Sweden', 'UK', 'Italy', 'South Korea'])
@@ -57,28 +56,47 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
       .range([0, width]);
     svg.append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .style("font-size", "14px");
 
     //Y axis
     const y = d3.scaleLinear()
       .domain([0, d3.max(filteredCars, d => d[yAxis])])
       .range([height, 0]);
     svg.append("g")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .style("font-size", "14px");;
 
-    // Add dots
-    svg.append('g')
-    .selectAll("dot")
-    .data(filteredCars)
-    .enter()
-    .append("circle")
-      .attr("cx", d => x(d.EngineCylinders))
-      .attr("cy", d => y(d[yAxis]))
-      .attr("r", 5)
-      .attr("class", "dot")
-      .style("fill", d => colorScale(makeToCountry[d.Make] || 'Other'))
-      .style("stroke", "black")
-      .style("stroke-width", 1);
+    //add points
+    const dots = svg.append('g')
+      .selectAll("dot")
+      .data(filteredCars)
+      .enter()
+      .append("circle")
+        .attr("cx", d => x(d.EngineCylinders))
+        .attr("cy", d => y(d[yAxis]))
+        .attr("r", 5)
+        .attr("class", "dot")
+        .style("fill", d => colorScale(makeToCountry[d.Make] || 'Other'))
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+
+    //hover effect - tooltip
+    dots.on("mouseover", function(event, d) {
+        d3.select(this).attr("r", 8);
+        d3.select("#tooltip")
+          .style("visibility", "visible")
+          .html(`Make: ${d.Make}<br/>
+                Fuel: ${d.Fuel}<br/>
+                Cylinders: ${d.EngineCylinders}<br/>
+                ${yAxis === "AverageHighwayMPG" ? "Highway" : "City"} MPG: ${d[yAxis]}`)
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", function() {
+        d3.select(this).attr("r", 5);
+        d3.select("#tooltip").style("visibility", "hidden");
+      });
 
     //calc best fit line
     const xMean = d3.mean(filteredCars, d => d.EngineCylinders);
@@ -104,19 +122,19 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
 
     //display R2 value
     svg.append("text")
-      .attr("x", width - 100)
+      .attr("x", width - 10)
       .attr("y", height - 10)
       .attr("text-anchor", "end")
-      .style("font-size", "14px")
+      .style("font-size", "12px")
       .style("fill", "black")
       .text(`R²: ${rSquared.toFixed(2)}`);
 
     //best fit line
     svg.append("text")
-      .attr("x", width - 100)
+      .attr("x", width - 10)
       .attr("y", height - 30)
       .attr("text-anchor", "end")
-      .style("font-size", "14px")
+      .style("font-size", "12px")
       .style("fill", "black")
       .text(`y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`);
 
@@ -125,6 +143,7 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
       .attr("x", width / 2)
       .attr("y", height + margin.top + 20)
       .style("text-anchor", "middle")
+      .style("font-size", "16px")
       .text("Engine Cylinders");
 
     svg.append("text")
@@ -133,6 +152,7 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
+      .style("font-size", "16px")
       .text(yAxis === "AverageHighwayMPG" ? "Average Highway MPG" : "Average City MPG");
 
     //legend

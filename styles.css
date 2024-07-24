@@ -8,9 +8,18 @@ body {
     margin: 0;
 }
 
-.chart {
-    width: 80%;
-    height: 66vh;
+#chart-legend-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+#chart {
+    width: 75%;
+    height: auto;
 }
 
 .title {
@@ -57,28 +66,40 @@ body {
 }
 
 #legend-container {
-    margin-top: 20px;
-    text-align: center;
-  }
+    width: 20%;
+    padding-left: 20px;
+    align-self: center;
+}
   
-  #legend-container h3 {
+#legend-container h3 {
     margin-bottom: 10px;
-  }
-  
-  #legend {
+    text-align: center;
+}
+
+#legend {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .legend-item {
+    flex-direction: column;
+}
+
+.legend-item {
     display: flex;
     align-items: center;
-    margin: 0 10px 5px 0;
-  }
-  
-  .legend-color {
+    margin-bottom: 5px;
+}
+
+.legend-color {
     width: 18px;
     height: 18px;
     margin-right: 5px;
+}
+
+#tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 8px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
   }
