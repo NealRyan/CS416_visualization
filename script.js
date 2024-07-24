@@ -1,6 +1,17 @@
 let currentScene = 1;
 let makes = [];
 
+const makeToCountry = {
+  'Honda': 'Japan', 'Acura': 'Japan', 'Toyota': 'Japan', 'Lexus': 'Japan', 'Nissan': 'Japan', 'Infiniti': 'Japan',
+  'Mazda': 'Japan', 'Subaru': 'Japan', 'Mitsubishi': 'Japan',
+  'Ford': 'USA', 'Chevrolet': 'USA', 'Dodge': 'USA', 'Chrysler': 'USA', 'Jeep': 'USA', 'Cadillac': 'USA',
+  'Buick': 'USA', 'GMC': 'USA', 'Lincoln': 'USA', 'Ram': 'USA', 'Tesla': 'USA',
+  'BMW': 'Germany', 'Mercedes-Benz': 'Germany', 'Audi': 'Germany', 'Volkswagen': 'Germany', 'Porsche': 'Germany',
+  'Volvo': 'Sweden', 'Jaguar': 'UK', 'Land Rover': 'UK', 'Mini': 'UK',
+  'Fiat': 'Italy', 'Alfa Romeo': 'Italy', 'Maserati': 'Italy',
+  'Hyundai': 'South Korea', 'Kia': 'South Korea', 'Genesis': 'South Korea'
+};
+
 //update title/message
 function setTitleAndMessage(title, message) {
   document.getElementById('title').textContent = title;
@@ -19,6 +30,10 @@ const svg = d3.select("#chart")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
+
+const colorScale = d3.scaleOrdinal()
+  .domain(['Japan', 'USA', 'Germany', 'Sweden', 'UK', 'Italy', 'South Korea'])
+  .range(d3.schemeCategory10);
 
 //update the chart
 function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
@@ -53,15 +68,17 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
 
     // Add dots
     svg.append('g')
-      .selectAll("dot")
-      .data(filteredCars)
-      .enter()
-      .append("circle")
-        .attr("cx", d => x(d.EngineCylinders))
-        .attr("cy", d => y(d[yAxis]))
-        .attr("r", 5)
-        .attr("class", "dot")
-        .style("fill", "#69b3a2");
+    .selectAll("dot")
+    .data(filteredCars)
+    .enter()
+    .append("circle")
+      .attr("cx", d => x(d.EngineCylinders))
+      .attr("cy", d => y(d[yAxis]))
+      .attr("r", 5)
+      .attr("class", "dot")
+      .style("fill", d => colorScale(makeToCountry[d.Make] || 'Other'))
+      .style("stroke", "black")
+      .style("stroke-width", 1);
 
     //calc best fit line
     const xMean = d3.mean(filteredCars, d => d.EngineCylinders);
@@ -117,7 +134,28 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .text(yAxis === "AverageHighwayMPG" ? "Average Highway MPG" : "Average City MPG");
+
+    //legend
+    createLegend();
   });
+}
+
+//legend
+function createLegend() {
+  const legendContainer = d3.select("#legend");
+  legendContainer.selectAll("*").remove();
+
+  const legendItems = legendContainer.selectAll(".legend-item")
+    .data(colorScale.domain())
+    .enter().append("div")
+      .attr("class", "legend-item");
+
+  legendItems.append("div")
+    .attr("class", "legend-color")
+    .style("background-color", d => colorScale(d));
+
+  legendItems.append("span")
+    .text(d => d);
 }
 
 //populate dropdown
@@ -201,6 +239,7 @@ d3.select('#reset-button').on('click', () => {
     
     As the relationship shows a fairly high R squared value, we can feel pretty confident that the number of engine cylinders is a good predictor of that car's average highway MPG (though not the only factor - as the r squared value is not 1).`
   );
+  createLegend();
 });
 
 //event listeners for the dropdowns
@@ -216,6 +255,7 @@ d3.select('#fuel-select').on('change', function() {
     `Custom View: ${mpgType} MPG vs. Number of Engine Cylinders`,
     `Showing the relationship between engine cylinders and ${mpgType.toLowerCase()} MPG for ${selectedMake} ${selectedFuel} cars. `
   );
+  createLegend();
 });
 
 d3.select('#make-select').on('change', function() {
@@ -244,4 +284,5 @@ d3.select('#y-axis-select').on('change', function() {
     `Custom View: ${mpgType} MPG vs. Number of Engine Cylinders`,
     `Showing the relationship between engine cylinders and ${mpgType.toLowerCase()} MPG for ${selectedMake} ${selectedFuel} cars.`
   );
+  createLegend();
 });
