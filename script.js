@@ -236,7 +236,11 @@ updateChart(
   "Gasoline cars: Highway MPG vs. Number of Engine Cylinders",
   `We can see from the data that gasoline powered cars have a fairly strong trend of decreasing average MPG with increasing engine cylinders. On average, each extra cylinder loses the car about 1.9 MPG, a relationship which explains 68% of the variability of Highway MPG in the data. 
   
-  As the relationship shows a fairly high R squared value, we can feel pretty confident that the number of engine cylinders is a good predictor of that car's average highway MPG (though not the only factor - as the r squared value is not 1).`
+  As the relationship shows a fairly high R squared value, we can feel pretty confident that the number of engine cylinders is a good predictor of that car's average highway MPG (though not the only factor - as the r squared value is not 1).
+  
+  Anecdotally, we can also see some interesting trends between points and the country or origin of the cars. Japanese cars tend toward lower engine cylinder count, American cars toward higher cylinder count, and German cars seems to run the gamut.
+  
+  Another point to note thats made more obvious through the use of a scatter plot: most engines have an even number of cylinders. This is because the combustion mechanism is very violent and causes fairly considerable forces in a particular vector. By using even numbers of cylinders that oppose eachother in direction, one of the dimensions of the force vector is signficantly reduced (simply put: the engine vibrates considerably less).`
 );
 
 //event listener for next button
