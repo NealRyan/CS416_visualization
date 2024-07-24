@@ -12,6 +12,11 @@ const makeToCountry = {
   'Hyundai': 'South Korea', 'Kia': 'South Korea', 'Genesis': 'South Korea'
 };
 
+//jitter for dots
+function jitter(value, amount) {
+  return value + (Math.random() - 0.5) * amount;
+}
+
 //update title/message
 function setTitleAndMessage(title, message) {
   document.getElementById('title').textContent = title;
@@ -67,13 +72,14 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
       .call(d3.axisLeft(y))
       .style("font-size", "14px");;
 
-    //add points
+    //add points with x jitter
+    const jitterAmount = 0.3; 
     const dots = svg.append('g')
       .selectAll("dot")
       .data(filteredCars)
       .enter()
       .append("circle")
-        .attr("cx", d => x(d.EngineCylinders))
+        .attr("cx", d => x(jitter(d.EngineCylinders, jitterAmount)))
         .attr("cy", d => y(d[yAxis]))
         .attr("r", 5)
         .attr("class", "dot")
@@ -83,20 +89,20 @@ function updateChart(fuelType, make, yAxis, newTitle, newMessage) {
 
     //hover effect - tooltip
     dots.on("mouseover", function(event, d) {
-        d3.select(this).attr("r", 8);
-        d3.select("#tooltip")
-          .style("visibility", "visible")
-          .html(`Make: ${d.Make}<br/>
-                Fuel: ${d.Fuel}<br/>
-                Cylinders: ${d.EngineCylinders}<br/>
-                ${yAxis === "AverageHighwayMPG" ? "Highway" : "City"} MPG: ${d[yAxis]}`)
-          .style("left", (event.pageX + 10) + "px")
-          .style("top", (event.pageY - 28) + "px");
-      })
-      .on("mouseout", function() {
-        d3.select(this).attr("r", 5);
-        d3.select("#tooltip").style("visibility", "hidden");
-      });
+      d3.select(this).attr("r", 8);
+      d3.select("#tooltip")
+        .style("visibility", "visible")
+        .html(`Make: ${d.Make}<br/>
+              Fuel: ${d.Fuel}<br/>
+              Cylinders: ${d.EngineCylinders}<br/>
+              ${yAxis === "AverageHighwayMPG" ? "Highway" : "City"} MPG: ${d[yAxis].toFixed(1)}`)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    })
+    .on("mouseout", function() {
+      d3.select(this).attr("r", 5);
+      d3.select("#tooltip").style("visibility", "hidden");
+    });
 
     //calc best fit line
     const xMean = d3.mean(filteredCars, d => d.EngineCylinders);
